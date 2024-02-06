@@ -1,0 +1,42 @@
+import math
+import numpy as np
+def euclidean_distance(vector1, vector2):
+    if len(vector1) != len(vector2):
+        raise ValueError("Vectors must have the same dimension")
+    squared_distances = [(v1 - v2) ** 2 for v1, v2 in zip(vector1, vector2)]
+    return math.sqrt(sum(squared_distances))
+def manhattan_distance(vector1, vector2):
+    if len(vector1) != len(vector2):
+        raise ValueError("Vectors must have the same dimension")
+    return sum(abs(v1 - v2) for v1, v2 in zip(vector1, vector2))
+def k_nearest_neighbors(train_X, train_y, test_instance, k):
+    distances = [(i, euclidean_distance(train_instance, test_instance)) for i, train_instance in enumerate(train_X)]
+    distances.sort(key=lambda x: x[1])
+    k_nearest_indices = [index for index, _ in distances[:k]]
+    k_nearest_labels = train_y[k_nearest_indices]
+    return np.argmax(np.bincount(k_nearest_labels))
+def label_encoding(categories):
+    unique_categories = set(categories)
+    category_to_numeric = {category: i for i, category in enumerate(unique_categories)}
+    return [category_to_numeric[category] for category in categories]
+def one_hot_encoding(categories):
+    unique_categories = set(categories)
+    encoded = []
+    for category in categories:
+        encoding = [0] * len(unique_categories)
+        encoding[list(unique_categories).index(category)] = 1
+        encoded.append(encoding)
+    return encoded
+if __name__ == "__main__":
+    vector1 = [1, 2, 3]
+    vector2 = [4, 5, 6]
+    train_X = np.array([[1, 2], [3, 4], [5, 6]])
+    train_y = np.array([0, 1, 0])
+    test_instance = np.array([7, 8])
+    print("Euclidean distance between vector1 and vector2:", euclidean_distance(vector1, vector2))
+    print("Manhattan distance between vector1 and vector2:", manhattan_distance(vector1, vector2))
+    k = 2
+    print("Predicted label for test_instance using k-NN with k =", k, ":", k_nearest_neighbors(train_X, train_y, test_instance, k))
+    categories = ['a', 'b', 'c', 'a', 'b']
+    print("Label encoding for categories:", label_encoding(categories))
+    print("One-hot encoding for categories:", one_hot_encoding(categories))
