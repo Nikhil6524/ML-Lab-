@@ -1,0 +1,52 @@
+import pandas as pd
+import numpy as np
+df=pd.read_excel('training_mathbert1.xlsx')
+df.head()
+def check(x):
+    if x < 0 or x > 4:
+        return 0
+    else:
+        return 1
+df['output'].apply(check)
+output_1_df = df[df['output'] == 1]
+output_0_df = df[df['output'] != 1]
+x=output_1_df.mean()
+y=output_0_df.mean()
+output_1_df.std(axis=1)
+output_0_df.std(axis=1)
+wednesday_prices=df[df["output"]==0]
+np.mean(wednesday_prices).sum()
+distance = np.linalg.norm(x-y)
+distance
+import seaborn as sns
+import matplotlib.pyplot as plt
+plt.figure(figsize=(10,10),dpi=200)
+sns.scatterplot(x='embed_0',y='embed_1',data=df)
+sns.histplot(df['embed_0'])
+df['embed_0'].mean()
+df['embed_1'].mean()
+from sklearn.model_selection import train_test_split
+
+# Assuming you have a DataFrame named 'df' containing embeddings and an 'output' column
+# Split the DataFrame into two based on the output class
+df_class_0 = df[df['output'] == 0]
+df_class_1 = df[df['output'] == 1]
+
+# Separate features (embeddings) and target (output) for each class
+X_class_0 = df_class_0.iloc[:, :383]  # Assuming embeddings are in columns 0 to 382
+y_class_0 = df_class_0['output']
+
+X_class_1 = df_class_1.iloc[:, :383]  # Assuming embeddings are in columns 0 to 382
+y_class_1 = df_class_1['output']
+
+# Split each class into training and testing sets
+X_train_class_0, X_test_class_0, y_train_class_0, y_test_class_0 = train_test_split(X_class_0, y_class_0, test_size=0.2, random_state=42)
+X_train_class_1, X_test_class_1, y_train_class_1, y_test_class_1 = train_test_split(X_class_1, y_class_1, test_size=0.2, random_state=42)
+
+# Combine training and testing sets for both classes
+X_train = pd.concat([X_train_class_0, X_train_class_1])
+X_test = pd.concat([X_test_class_0, X_test_class_1])
+y_train = pd.concat([y_train_class_0, y_train_class_1])
+y_test = pd.concat([y_test_class_0, y_test_class_1])
+print("Training set shape:", X_train.shape, y_train.shape)
+print("Testing set shape:", X_test.shape, y_test.shape)
