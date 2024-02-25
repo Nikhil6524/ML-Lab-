@@ -12,6 +12,30 @@ print(f"no of vectors:{np.shape(A)[0]}")
 print(np.linalg.matrix_rank(A))
 print(f"pinv{np.linalg.pinv(A)}")
 ##
+df['category'] = ['rich' if payment > 200 else 'poor' for payment in df['Payment (Rs)']]
+print(df["category"])
+##
+import statistics
+dataset = pd.read_excel("C:/Users/aryan/Downloads/Lab Session1 Data.xlsx",sheet_name=1)
+df = pd.DataFrame(dataset)
+price=df[["Price"]].values
+#the mean and variance 
+print(f"the mean is {np.mean(price)} and the variance is {np.var(price)}")
+#calculating the mean for all the days of wednesday
+wednesday_prices=df[df["Day"]=="Wed"]["Price"]
+print(f"The mean of prices on wednesday is {statistics.mean(wednesday_prices)}")
+#calculating the mean for the month of april
+april_prices=df[df["Month"]=="Apr"]["Price"]
+print(f"The mean of prices on april is {statistics.mean(april_prices)}")
+loss=0
+profit=0
+for index, row in df.iterrows():
+    if row["Chg%"]<=0:
+        profit+=1
+    else:
+        loss+=1
+print(f"the probablity of overall loss is {loss/(profit+loss)}")
+#calculate the probability of getting a profit on wednesday
 data1=pd.read_excel('C:\\Users\\V R N S Nikhil\\Downloads\\Lab Session1 Data.xlsx',sheet_name=1)
 df1=pd.DataFrame(data1)
 print(df1)
